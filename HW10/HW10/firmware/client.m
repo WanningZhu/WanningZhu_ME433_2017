@@ -49,7 +49,7 @@ FIR = zeros(collect_size,1);
 % take the appropriate action
 for i = 1:1:collect_size
     aa = fscanf(mySerial,'%c\r\n');
-    aaa = textscan(aa,'%d,%d,%f,%f,%f');
+    aaa = textscan(aa,'%f,%f,%f,%f,%f')
     thedata = cell2mat(aaa);
     check_size = size(thedata);
     if check_size(1,1) == 0
