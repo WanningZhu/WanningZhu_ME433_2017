@@ -39,6 +39,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #ifndef _APP_H
 #define _APP_H
 
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Included Files
@@ -51,14 +52,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include <stdlib.h>
 #include "system_config.h"
 #include "system_definitions.h"
-
-// DOM-IGNORE-BEGIN
-#ifdef __cplusplus  // Provide C++ Compatibility
-
-extern "C" {
-
-#endif
-// DOM-IGNORE-END 
+#include "mouse.h"
 
 // *****************************************************************************
 // *****************************************************************************
@@ -67,7 +61,7 @@ extern "C" {
 // *****************************************************************************
 
 // *****************************************************************************
-/* Application states
+/* Application States
   Summary:
     Application states enumeration
   Description:
@@ -79,26 +73,14 @@ typedef enum
 {
 	/* Application's state machine's initial state. */
 	APP_STATE_INIT=0,
-            
-	/* Application waits for device configuration*/
+
+	/* Application waits for configuration in this state */
     APP_STATE_WAIT_FOR_CONFIGURATION,
 
-    /* The application checks if a switch was pressed */
-    APP_STATE_CHECK_TIMER,
+    /* Application runs mouse emulation in this state */
+    APP_STATE_MOUSE_EMULATE,
 
-    /* Wait for a character receive */
-    APP_STATE_SCHEDULE_READ,
-
-    /* A character is received from host */
-    APP_STATE_WAIT_FOR_READ_COMPLETE,
-
-    /* Wait for the TX to get completed */
-    APP_STATE_SCHEDULE_WRITE,
-
-    /* Wait for the write to complete */
-    APP_STATE_WAIT_FOR_WRITE_COMPLETE,
-
-    /* Application Error state*/
+    /* Application error state */
     APP_STATE_ERROR
 
 } APP_STATES;
@@ -116,44 +98,47 @@ typedef enum
 
 typedef struct
 {
-    /* Device layer handle returned by device layer open function */
-    USB_DEVICE_HANDLE deviceHandle;
-
-    /* Application's current state*/
+    /* The application's current state */
     APP_STATES state;
 
-    /* Set Line Coding Data */
-    USB_CDC_LINE_CODING setLineCodingData;
+    /* device layer handle returned by device layer open function */
+    USB_DEVICE_HANDLE  deviceHandle;
 
-    /* Device configured state */
+    /* Is device configured */
     bool isConfigured;
 
-    /* Get Line Coding Data */
-    USB_CDC_LINE_CODING getLineCodingData;
+    /* Mouse x coordinate*/
+    MOUSE_COORDINATE xCoordinate;
 
-    /* Control Line State */
-    USB_CDC_CONTROL_LINE_STATE controlLineStateData;
+    /* Mouse y coordinate*/
+    MOUSE_COORDINATE yCoordinate;
 
-    /* Read transfer handle */
-    USB_DEVICE_CDC_TRANSFER_HANDLE readTransferHandle;
+    /* Mouse buttons*/
+    MOUSE_BUTTON_STATE mouseButton[MOUSE_BUTTON_NUMBERS];
 
-    /* Write transfer handle */
-    USB_DEVICE_CDC_TRANSFER_HANDLE writeTransferHandle;
+    /* HID instance associated with this app object*/
+    SYS_MODULE_INDEX hidInstance;
 
-    /* True if a character was read */
-    bool isReadComplete;
+    /* Transfer handle */
+    USB_DEVICE_HID_TRANSFER_HANDLE reportTransferHandle;
 
-    /* True if a character was written*/
-    bool isWriteComplete;
+    /* Device Layer System Module Object */
+    SYS_MODULE_OBJ deviceLayerObject;
 
-    /* Flag determines SOF event occurrence */
+    /* USB HID active Protocol */
+    uint8_t activeProtocol;
+
+    /* USB HID current Idle */
+    uint8_t idleRate;
+
+    /* Tracks the progress of the report send */
+    bool isMouseReportSendBusy;
+
+    /* Flag determines SOF event has occured */
     bool sofEventHasOccurred;
 
-    /* Break data */
-    uint16_t breakData;
-
-    /* Application CDC read buffer */
-    uint8_t * readBuffer;
+    /* SET IDLE timer */
+    uint16_t setIdleTimer;
 
 } APP_DATA;
 
@@ -165,6 +150,7 @@ typedef struct
 // *****************************************************************************
 /* These routines are called by drivers when certain events occur.
 */
+
 	
 // *****************************************************************************
 // *****************************************************************************
@@ -222,17 +208,10 @@ void APP_Initialize ( void );
     This routine must be called from SYS_Tasks() routine.
  */
 
-void APP_Tasks( void );
+void APP_Tasks ( void );
 
 
 #endif /* _APP_H */
-
-//DOM-IGNORE-BEGIN
-#ifdef __cplusplus
-}
-#endif
-//DOM-IGNORE-END
-
 /*******************************************************************************
  End of File
  */
