@@ -37,12 +37,16 @@
         <Path>Source Files/framework/system/devcon/src</Path>
       </File>
       <File>
+        <Name>usb_hid.h</Name>
+        <Path>Header Files/framework/usb</Path>
+      </File>
+      <File>
         <Name>osal.h</Name>
         <Path>Header Files/framework/osal</Path>
       </File>
       <File>
-        <Name>usb_device_cdc.h</Name>
-        <Path>Header Files/framework/usb</Path>
+        <Name>usb_device_hid_local.h</Name>
+        <Path>Header Files/framework/usb/src</Path>
       </File>
       <File>
         <Name>drv_usbhs.h</Name>
@@ -63,6 +67,10 @@
       <File>
         <Name>sys_ports.h</Name>
         <Path>Header Files/framework/system/ports</Path>
+      </File>
+      <File>
+        <Name>usb_device_hid.c</Name>
+        <Path>Source Files/framework/usb/src/dynamic</Path>
       </File>
       <File>
         <Name>usb_chapter_9.h</Name>
@@ -91,6 +99,10 @@
       <File>
         <Name>usb_device.c</Name>
         <Path>Source Files/framework/usb/src/dynamic</Path>
+      </File>
+      <File>
+        <Name>usb_device_hid.h</Name>
+        <Path>Header Files/framework/usb</Path>
       </File>
       <File>
         <Name>sys_clk.h</Name>
@@ -141,16 +153,8 @@
         <Path>Header Files/framework/system/debug</Path>
       </File>
       <File>
-        <Name>usb_device_cdc_acm.c</Name>
-        <Path>Source Files/framework/usb/src/dynamic</Path>
-      </File>
-      <File>
         <Name>sys_module.h</Name>
         <Path>Header Files/framework/system/common</Path>
-      </File>
-      <File>
-        <Name>usb_cdc.h</Name>
-        <Path>Header Files/framework/usb</Path>
       </File>
       <File>
         <Name>sys_devcon_pic32mx.c</Name>
@@ -169,20 +173,12 @@
         <Path>Header Files/framework/driver/usb/usbfs/src</Path>
       </File>
       <File>
-        <Name>usb_device_cdc_local.h</Name>
-        <Path>Header Files/framework/usb/src</Path>
-      </File>
-      <File>
         <Name>peripheral.h</Name>
         <Path>Header Files/framework/peripheral</Path>
       </File>
       <File>
         <Name>sys_queue.h</Name>
         <Path>Header Files/framework/system/common</Path>
-      </File>
-      <File>
-        <Name>usb_device_cdc.c</Name>
-        <Path>Source Files/framework/usb/src/dynamic</Path>
       </File>
       <File>
         <Name>sys_int.h</Name>
@@ -206,7 +202,7 @@
       <Template>
         <Name>system_init.c</Name>
         <Path>Source Files/app/system_config/default</Path>
-        <Checksum>1566432AE201A69D0FF642F2AC03FF48</Checksum>
+        <Checksum>DB984B7D3A6D12963805149DC260143E</Checksum>
       </Template>
       <Template>
         <Name>main.c</Name>
@@ -220,12 +216,13 @@
       <Template>
         <Name>system_config.h</Name>
         <Path>Header Files/app/system_config/default</Path>
-        <Checksum>7DAC3B7C1301190BFE0F1FA3F215F7BB</Checksum>
+        <Checksum>3FAFDE878B8EDF2692DA545175058FD6</Checksum>
+        <ProjectFileChecksum>876FDFD6F5160BC1D4251C0258A225CE</ProjectFileChecksum>
       </Template>
       <Template>
         <Name>system_definitions.h</Name>
         <Path>Header Files/app/system_config/default</Path>
-        <Checksum>CD7A6473CB25377C9ED9A2E8111D7E2C</Checksum>
+        <Checksum>5902D934BE2F1D8885B79305A30F5AE9</Checksum>
       </Template>
       <Template>
         <Name>system_exceptions.c</Name>

@@ -221,12 +221,10 @@ build/default/production/_ext/1688732426/system_interrupt.o:  \
  ../../../../../../../../microchip/harmony/v1_10/framework/osal/osal.h  \
  ../../../../../../../../microchip/harmony/v1_10/framework/osal/osal_definitions.h  \
  ../../../../../../../../microchip/harmony/v1_10/framework/osal/src/osal_impl_basic.h  \
- ../../../../../../../../microchip/harmony/v1_10/framework/usb/usb_device_cdc.h  \
- ../../../../../../../../microchip/harmony/v1_10/framework/usb/usb_cdc.h  \
- ../src/mouse.h  \
  ../../../../../../../../microchip/harmony/v1_10/framework/usb/usb_device_hid.h  \
  ../../../../../../../../microchip/harmony/v1_10/framework/usb/usb_common.h  \
  ../../../../../../../../microchip/harmony/v1_10/framework/usb/usb_chapter_9.h  \
  ../../../../../../../../microchip/harmony/v1_10/framework/usb/usb_device.h  \
  ../../../../../../../../microchip/harmony/v1_10/framework/usb/usb_hid.h  \
- ../src/system_config/default/system_definitions.h 
+ ../src/mouse.h  \
+../src/system_config/default/system_definitions.h 

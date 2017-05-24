@@ -198,7 +198,7 @@ void APP_USBDeviceEventHandler(USB_DEVICE_EVENT event, void * eventData, uintptr
         case USB_DEVICE_EVENT_RESET:
         case USB_DEVICE_EVENT_DECONFIGURED:
 
-            /* Device got deconfigured */
+             /* Device got deconfigured */
 
             appData.isConfigured = false;
             appData.isMouseReportSendBusy = false;
@@ -357,11 +357,12 @@ void init_filterbuffer(){
     MAF_count = 0;
 }
 
-float MAF(int max_length){
+float MAF(int max_length, int raw_index){   //raw_index point to the position of the data in acData
     float sumMAF = 0;
     float ave;
     int i = 0;
-    MAF_buffer[MAF_count] = acData[6];
+    short rawdata =acData[raw_index];
+    MAF_buffer[MAF_count] = rawdata;
     if(MAF_count == max_length-1){
         MAF_count = 0;
     }
@@ -440,10 +441,11 @@ void APP_Initialize(void) {
  */
 
 void APP_Tasks(void) {
-    static int8_t vector = 0;
-    static uint8_t movement_length = 0;
-    int8_t dir_table[] = {-4, -4, -4, 0, 4, 4, 4, 0};
-
+//    static int8_t vector = 0;
+//    static uint8_t movement_length = 0;
+//    int8_t dir_table[] = {-4, -4, -4, 0, 4, 4, 4, 0};
+      static uint8_t inc = 0;
+      static int8_t x_speed, y_speed; 
     /* Check the application's current state. */
     switch (appData.state) {
             /* Application's initial state. */
@@ -480,14 +482,28 @@ void APP_Tasks(void) {
         case APP_STATE_MOUSE_EMULATE:
             
             // every 50th loop, or 20 times per second
-            if (movement_length > 50) {
-                appData.mouseButton[0] = MOUSE_BUTTON_STATE_RELEASED;
-                appData.mouseButton[1] = MOUSE_BUTTON_STATE_RELEASED;
-                appData.xCoordinate = (int8_t) dir_table[vector & 0x07];
-                appData.yCoordinate = (int8_t) dir_table[(vector + 2) & 0x07];
-                vector++;
-                movement_length = 0;
+//            if (movement_length > 50) {
+//                appData.mouseButton[0] = MOUSE_BUTTON_STATE_RELEASED;
+//                appData.mouseButton[1] = MOUSE_BUTTON_STATE_RELEASED;
+//                appData.xCoordinate = (int8_t) 1;
+//                appData.yCoordinate = (int8_t) 1;
+//                vector++;
+//                movement_length = 0;
+//            }
+            getAccel(acData);
+            int MAF_max_length = 4;
+            if (inc >20){
+                x_speed = (int8_t)(MAF(MAF_max_length,1)*35.0/1000.0);  //g_x
+                y_speed = (int8_t)(MAF(MAF_max_length,2)*35.0/1000.0);  //g_y
+                appData.xCoordinate = (int8_t) x_speed;
+                appData.yCoordinate = (int8_t) y_speed;
+                inc = 0;
             }
+            else{
+                appData.xCoordinate = (int8_t) 0;
+                appData.yCoordinate = (int8_t) 0;
+            }
+            
 
             if (!appData.isMouseReportSendBusy) {
                 /* This means we can send the mouse report. The
@@ -539,7 +555,8 @@ void APP_Tasks(void) {
                             sizeof (MOUSE_REPORT));
                     appData.setIdleTimer = 0;
                 }
-                movement_length++;
+//                movement_length++;
+                inc++;
             }
 
             break;

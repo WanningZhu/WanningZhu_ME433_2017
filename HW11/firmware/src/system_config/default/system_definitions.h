@@ -61,7 +61,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "usb/usb_device.h"
 
 
-#include "usb/usb_device_cdc.h"
+#include "usb/usb_device_hid.h"
 
 #include "app.h"
 
