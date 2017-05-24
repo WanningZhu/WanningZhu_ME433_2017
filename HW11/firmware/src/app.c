@@ -361,8 +361,7 @@ float MAF(int max_length, int raw_index){   //raw_index point to the position of
     float sumMAF = 0;
     float ave;
     int i = 0;
-    short rawdata =acData[raw_index];
-    MAF_buffer[MAF_count] = rawdata;
+    MAF_buffer[MAF_count] = acData[raw_index];
     if(MAF_count == max_length-1){
         MAF_count = 0;
     }
@@ -424,7 +423,7 @@ void APP_Initialize(void) {
     //initialize LED
     TRISBbits.TRISB4 = 1;
     TRISAbits.TRISA4 = 0;
-    LATAbits.LATA4 = 0;
+    LATAbits.LATA4 = 1;
     //get start time
     startTime = _CP0_GET_COUNT();
     //initialize IMU
@@ -492,9 +491,13 @@ void APP_Tasks(void) {
 //            }
             getAccel(acData);
             int MAF_max_length = 4;
-            if (inc >20){
-                x_speed = (int8_t)(MAF(MAF_max_length,1)*35.0/1000.0);  //g_x
-                y_speed = (int8_t)(MAF(MAF_max_length,2)*35.0/1000.0);  //g_y
+            if (inc >10){
+//                x_speed = (int8_t)(MAF(MAF_max_length,1)*35.0/1000.0);  //g_x
+//                y_speed = (int8_t)(MAF(MAF_max_length,2)*35.0/1000.0);  //g_y
+//                x_speed = (int8_t)(MAF(MAF_max_length,4)*0.61/1000.0);  //a_x
+//                y_speed = (int8_t)(MAF(MAF_max_length,5)*0.61/1000.0);  //a_y
+                x_speed = (int8_t)(acData[4]*0.61/1000.0);  //a_x
+                y_speed = (int8_t)(acData[5]*0.61/1000.0);  //a_y
                 appData.xCoordinate = (int8_t) x_speed;
                 appData.yCoordinate = (int8_t) y_speed;
                 inc = 0;
@@ -555,7 +558,7 @@ void APP_Tasks(void) {
                             sizeof (MOUSE_REPORT));
                     appData.setIdleTimer = 0;
                 }
-//                movement_length++;
+               // movement_length++;
                 inc++;
             }
 

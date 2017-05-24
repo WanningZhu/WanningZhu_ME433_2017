@@ -614,7 +614,8 @@ void APP_Tasks(void) {
             aveMAF = MAF(MAF_maxlength);
             aveIIR = IIR(IIR_a , IIR_b);
             aveFIR = FIR(FIR_maxlength,gain);
-//            len = sprintf(dataOut,"%d aveFIR=%f\r\n",count+1,aveFIR);
+            //len = sprintf(dataOut,"%f\r\n",acData[4]*0.61/1000.0);
+            //len = sprintf(dataOut,"%d %d %d\r\n",count,acData[4],acData[5]);
             len = sprintf(dataOut, "%d,%d ,%.2f , %.2f, %.2f\r\n",count+1,acData[6],aveMAF,aveIIR,aveFIR);
             count++;
             if (appData.isReadComplete) {
