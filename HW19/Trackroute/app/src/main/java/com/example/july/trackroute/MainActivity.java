@@ -85,6 +85,7 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
         parameters.setPreviewSize(640, 480);
         parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_INFINITY); // no autofocusing
         parameters.setAutoExposureLock(true); // keep the white balance constant
+        parameters.setAutoWhiteBalanceLock((true)); //set white balance off
         mCamera.setParameters(parameters);
         mCamera.setDisplayOrientation(90); // rotate to portrait mode
 
@@ -116,8 +117,13 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
 //    }
 
     public boolean checkGray(int i){
-        if (((green(i) - red(i)) > -Range)&&((green(i) - red(i)) < Range)&&(green(i)  > Thresh)) {
-            return true;
+        if (((green(i) - red(i)) > -Range)&&((green(i) - red(i)) < Range)&&(green(i) > Thresh)&&(red(i)>Thresh)) {
+            if(red(i)*65536+green(i)*256+blue(i)>8421504){
+                return true;
+            }
+            else{
+                return false;
+            }
         }
         else {
             return false;
@@ -135,7 +141,7 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
             int[] pixels = new int[bmp.getWidth()]; // pixels[] is the RGBA data
 //            int startY = 200; // which row in the bitmap to analyze to read
 
-            for ( int row = 1; row < 480; row=row+10){
+            for ( int row = 200; row < 300; row=row+5){
                 bmp.getPixels(pixels, 0, bmp.getWidth(), 0, row, bmp.getWidth(), 1);
 
                 // in the row, see if there is more green than red

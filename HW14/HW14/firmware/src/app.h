@@ -101,6 +101,7 @@ typedef enum
     /* Application Error state*/
     APP_STATE_ERROR
 
+
 } APP_STATES;
 
 
