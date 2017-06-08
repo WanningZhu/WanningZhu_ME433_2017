@@ -89,6 +89,7 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
     int speedControl_right;
     int speedControl_left;
     float center_pre;
+    float aveCOM_pre;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -192,6 +193,10 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChanged = progress*12;
+                String sendString = String.valueOf(1)+' '+String.valueOf(progressChanged) + '\n';
+                try {
+                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+                } catch (IOException e) { }
                 speedTextView.setText("PWM: "+progressChanged);
             }
 
@@ -365,7 +370,7 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
 //        }
 //    }
         public boolean checkGray(int i){
-        if (((green(i) - red(i)) > -Range)&&((green(i) - red(i)) < Range)&&(green(i) > Thresh)&&(red(i)>Thresh)) {
+        if (((green(i) - red(i)) > -Range)&&((green(i) - red(i)) < Range)&&(green(i) > (Thresh*2))&&(red(i)>(Thresh*2))) {
             if(((green(i)-blue(i)>-Range)&&((green(i)-blue(i)) < Range))){
                 return true;
             }
@@ -421,17 +426,12 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
             center = sum_mr / sum_m;
         }
         else{
-            if(center_pre == 640){
-                center = 640;
-            }else {
-                center = 0;
-            }
+            center = 0;
         }
         center_pre = center;
         return center;
     }
 
-    public void check_distance(float )
 
 
     // the important function
@@ -565,25 +565,65 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
 //            canvas.drawCircle(COM5,y5,5,paint1);
 //            canvas.drawCircle(COM6,y6,5,paint1);
 /*stop here*/
-/*test1*/
+/*test1 nearlly worked*/
             sumCOM = 0;
             count = 0;
-            for(int row = 50;row<251;row=row+5){
+            for(int row = 240;row<=250;row=row+5){
                    float COMtemp = read_masscenter(row);
-                   sumCOM = sumCOM+COMtemp;
-                   count++;
+                if(COMtemp!=0){
+                    sumCOM = sumCOM+COMtemp;
+                    count++;
+                }
                 canvas.drawCircle(COMtemp,row,5,paint1);
             }
-            aveCOM = sumCOM/count;
-            //send data
-            String sendString = String.valueOf(0)+' '+String.valueOf((int)aveCOM) + '\n';
-            try {
-                sPort.write(sendString.getBytes(), 10); // 10 is the timeout
-            } catch (IOException e) { }
-            for(int row = 50;row<151;row=row+5){
-                canvas.drawCircle((int)aveCOM,100,5,paint1);
+            if(count == 0){
+                aveCOM = 0;
+            }else{
+                aveCOM = sumCOM/count;
             }
+
+            if(aveCOM != 0){
+                String sendString = String.valueOf(0)+' '+String.valueOf((int)aveCOM) + '\n';
+                try {
+                    sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+                } catch (IOException e) { }
+            }
+
 /*test1 stop*/
+
+/*test2*/
+//            sumCOM = 0;
+//            count = 0;
+//            for (int row = 50;row<=60;row=row+5){
+//                bmp.getPixels(pixels, 0, bmp.getWidth(), 0, row, bmp.getWidth(), 1);
+//                int sum_mr = 0;
+//                int sum_m = 0;
+//                for (int j = 0; j < bmp.getWidth(); j++) {
+//                    if (-437.5317 + 1.67219 * (float) red(pixels[j]) + 0.083888 * (float) green(pixels[j]) + 0.83757 * (float) blue(pixels[j]) > 0) {
+//                        pixels[j] = rgb(1, 1, 1);
+//                        sum_m = sum_m + 1;
+//                        sum_mr = sum_mr + j;
+//                        }
+//                    }
+//                    if (sum_m > 5) {
+//                        COM = sum_mr / sum_m;
+//                    }
+//                sumCOM = sumCOM + COM;
+//                canvas.drawCircle(COM, row, 5, paint1); // x position, y position, diameter, color
+//                bmp.setPixels(pixels, 0, bmp.getWidth(), 0, row, bmp.getWidth(), 1);
+//                count++;
+//            }
+//            aveCOM = sumCOM/count;
+//            //send data
+//            String sendString = String.valueOf(0)+' '+String.valueOf((int)aveCOM) + '\n';
+//            try {
+//                sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+//            } catch (IOException e) { }
+//
+//            canvas.drawCircle(aveCOM, 240, 5, paint1);
+
+
+/*test2 stop*/
 
             //send calculate pos to pic
             //show middle point, Thresh, Range

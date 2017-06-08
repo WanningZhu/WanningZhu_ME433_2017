@@ -419,6 +419,30 @@ void APP_Initialize(void) {
     See prototype in app.h.
  */
 
+//void Setspeed(void){
+//    if (click == 1){
+//        initspeed = rxVal;
+//        controlLeft_speed = initspeed;
+//        controlRight_speed = initspeed;   
+//        click = 0;
+//    }
+//    else {
+//         pos = rxVal;
+//        if (pos ==320){
+//           controlLeft_speed = initspeed;
+//           controlRight_speed = initspeed;
+//        } 
+//        if (pos > 320){ //turn right
+//            controlLeft_speed = (int)(initspeed*(1.0+(float)(pos-320)/320.0*0.3));
+//            controlRight_speed = (int)(initspeed*(1.0-(float)(pos-320)/320.0));
+//        }
+//        if (pos <320){ //turn left
+//            controlLeft_speed = (int)(initspeed*(1.0-(float)(320-pos)/320.0));
+//            controlRight_speed = (int)(initspeed*(1.0+(float)(320-pos)/320.0*0.3));
+//        }
+//    }
+//}
+
 void Setspeed(void){
     if (click == 1){
         initspeed = rxVal;
@@ -538,7 +562,7 @@ void APP_Tasks(void) {
 //            if (appData.isReadComplete || _CP0_GET_COUNT() - startTime > (48000000 / 2 / 5)) {
 //                appData.state = APP_STATE_SCHEDULE_WRITE;
 //            }
-            if (gotRx || _CP0_GET_COUNT() - startTime > (48000000 / 2 / 30)) {
+            if (gotRx || _CP0_GET_COUNT() - startTime > (48000000 / 2 / 10)) {
                 appData.state = APP_STATE_SCHEDULE_WRITE;
             }
 
