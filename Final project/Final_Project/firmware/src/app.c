@@ -72,6 +72,7 @@ int rxVal = 0; // a place to store the int that was received
 int click = 0; //check if the button is clicked
 int initspeed = 0; //initialize the speed
 int pos;
+int pos_pre = 320;
 
 //max value of OC1RS and OC4RS is 1999
 //direction 1 go forward, 0 go backward
@@ -419,30 +420,6 @@ void APP_Initialize(void) {
     See prototype in app.h.
  */
 
-//void Setspeed(void){
-//    if (click == 1){
-//        initspeed = rxVal;
-//        controlLeft_speed = initspeed;
-//        controlRight_speed = initspeed;   
-//        click = 0;
-//    }
-//    else {
-//         pos = rxVal;
-//        if (pos ==320){
-//           controlLeft_speed = initspeed;
-//           controlRight_speed = initspeed;
-//        } 
-//        if (pos > 320){ //turn right
-//            controlLeft_speed = (int)(initspeed*(1.0+(float)(pos-320)/320.0*0.3));
-//            controlRight_speed = (int)(initspeed*(1.0-(float)(pos-320)/320.0));
-//        }
-//        if (pos <320){ //turn left
-//            controlLeft_speed = (int)(initspeed*(1.0-(float)(320-pos)/320.0));
-//            controlRight_speed = (int)(initspeed*(1.0+(float)(320-pos)/320.0*0.3));
-//        }
-//    }
-//}
-
 void Setspeed(void){
     if (click == 1){
         initspeed = rxVal;
@@ -457,15 +434,48 @@ void Setspeed(void){
            controlRight_speed = initspeed;
         } 
         if (pos > 320){ //turn right
-            controlLeft_speed = initspeed;
+            controlLeft_speed = (int)(initspeed*(1.0+(float)(pos-320)/320.0*0.3));
             controlRight_speed = (int)(initspeed*(1.0-(float)(pos-320)/320.0));
         }
         if (pos <320){ //turn left
             controlLeft_speed = (int)(initspeed*(1.0-(float)(320-pos)/320.0));
-            controlRight_speed = initspeed;
+            controlRight_speed = (int)(initspeed*(1.0+(float)(320-pos)/320.0*0.3));
         }
     }
 }
+
+//void Setspeed(void){
+//    if (click == 1){
+//        initspeed = rxVal;
+//        controlLeft_speed = initspeed;
+//        controlRight_speed = initspeed;   
+//        click = 0;
+//    }
+//    else {
+//         pos = rxVal;
+//         int edot = pos-pos_pre; //>0 turn right, <0 turn left
+//         int sign; 
+//         float kd = 0.1;
+//         if(edot>0){
+//             sign = 1;
+//         }else{
+//             sign = -1;
+//         }
+//         if (pos ==320){
+//            controlLeft_speed = initspeed;
+//            controlRight_speed = initspeed;
+//        } 
+//        if (pos > 320){ //turn right
+//            controlLeft_speed = (int)(initspeed-kd*edot);
+//            controlRight_speed = (int)(initspeed*(1.0-(float)(pos-320)/320.0));
+//        }
+//        if (pos <320){ //turn left
+//            controlLeft_speed = (int)(initspeed*(1.0-(float)(320-pos)/320.0));
+//            controlRight_speed = (int)(initspeed-kd*edot);
+//        }
+//    pos_pre = pos;
+//    }
+//}
 
 void APP_Tasks(void) {
     /* Update the application state machine based

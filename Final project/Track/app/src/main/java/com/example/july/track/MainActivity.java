@@ -324,8 +324,8 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
         Camera.Parameters parameters = mCamera.getParameters();
         parameters.setPreviewSize(640, 480);
         parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_INFINITY); // no autofocusing
-        parameters.setAutoExposureLock(true); // keep the white balance constant
-        parameters.setAutoWhiteBalanceLock((true)); //set white balance off
+//        parameters.setAutoExposureLock(true); // keep the white balance constant
+//        parameters.setAutoWhiteBalanceLock((true)); //set white balance off
         mCamera.setParameters(parameters);
         mCamera.setDisplayOrientation(90); // rotate to portrait mode
 
@@ -568,7 +568,7 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
 /*test1 nearlly worked*/
             sumCOM = 0;
             count = 0;
-            for(int row = 240;row<=250;row=row+5){
+            for(int row = 260;row<=270;row=row+5){
                    float COMtemp = read_masscenter(row);
                 if(COMtemp!=0){
                     sumCOM = sumCOM+COMtemp;
